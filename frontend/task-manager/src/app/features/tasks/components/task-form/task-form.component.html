@@ -1,0 +1,56 @@
+<div class="task-form-container">
+    <h2>{{ taskToEdit ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
+    
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input 
+          type="text" 
+          id="title" 
+          formControlName="title"
+          placeholder="Escribe el título de la tarea"
+          [class.invalid]="taskForm.get('title')?.invalid && taskForm.get('title')?.touched"
+        >
+        <div class="error-message" *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched">
+          <span *ngIf="taskForm.get('title')?.errors?.['required']">El título es obligatorio</span>
+          <span *ngIf="taskForm.get('title')?.errors?.['maxlength']">El título debe tener máximo 100 caracteres</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea 
+          id="description" 
+          formControlName="description"
+          placeholder="Escribe la descripción de la tarea"
+          [class.invalid]="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"
+          rows="4"
+        ></textarea>
+        <div class="error-message" *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched">
+          <span *ngIf="taskForm.get('description')?.errors?.['required']">La descripción es obligatoria</span>
+          <span *ngIf="taskForm.get('description')?.errors?.['maxlength']">La descripción debe tener máximo 500 caracteres</span>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button 
+          *ngIf="taskToEdit" 
+          type="button" 
+          class="secondary-button" 
+          (click)="cancelEdit()"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="primary-button"
+          [disabled]="taskForm.invalid || loading"
+        >
+          <span *ngIf="!loading">{{ taskToEdit ? 'Actualizar' : 'Agregar' }}</span>
+          <span *ngIf="loading">Guardando...</span>
+        </button>
+      </div>
+      
+      <div class="error-message" *ngIf="error">{{ error }}</div>
+    </form>
+  </div>

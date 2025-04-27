@@ -1,0 +1,50 @@
+<div class="login-container">
+    <div class="login-card">
+      <h1>Administrador de Tareas</h1>
+      <p>Ingresa tu correo electrónico para continuar</p>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            placeholder="ejemplo@correo.com"
+            [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          >
+          <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <span *ngIf="loginForm.get('email')?.errors?.['required']">El correo es obligatorio</span>
+            <span *ngIf="loginForm.get('email')?.errors?.['email']">Ingresa un correo válido</span>
+          </div>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="primary-button" 
+          [disabled]="loginForm.invalid || loading"
+        >
+          <span *ngIf="!loading">Continuar</span>
+          <span *ngIf="loading">Cargando...</span>
+        </button>
+        
+        <div class="error-message" *ngIf="error">{{ error }}</div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Dialog para crear usuario nuevo -->
+  <div class="dialog-overlay" *ngIf="showCreateUserDialog">
+    <div class="dialog">
+      <h2>Nuevo Usuario</h2>
+      <p>El correo <strong>{{ emailToCreate }}</strong> no está registrado. ¿Deseas crear una nueva cuenta?</p>
+      
+      <div class="dialog-actions">
+        <button (click)="cancelCreateUser()" class="secondary-button">Cancelar</button>
+        <button (click)="createUser()" class="primary-button" [disabled]="loading">
+          <span *ngIf="!loading">Crear cuenta</span>
+          <span *ngIf="loading">Creando...</span>
+        </button>
+      </div>
+    </div>
+  </div>

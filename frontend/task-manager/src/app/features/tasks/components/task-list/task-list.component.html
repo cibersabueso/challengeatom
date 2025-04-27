@@ -1,0 +1,78 @@
+<div class="task-manager-container">
+    <header class="header">
+      <h1>Administrador de Tareas</h1>
+      <button class="logout-button" (click)="logout()">Cerrar sesión</button>
+    </header>
+    
+    <div class="content-wrapper">
+      <app-task-form 
+        [taskToEdit]="taskToEdit"
+        (taskCreated)="onTaskCreated($event)"
+        (taskUpdated)="onTaskUpdated($event)"
+      ></app-task-form>
+      
+      <div class="tasks-container">
+        <h2>Mis Tareas</h2>
+        
+        <div *ngIf="loading" class="loading-spinner">
+          Cargando tareas...
+        </div>
+        
+        <div *ngIf="error" class="error-message">
+          {{ error }}
+        </div>
+        
+        <div *ngIf="tasks.length === 0 && !loading" class="empty-state">
+          <p>No tienes tareas pendientes. ¡Agrega una nueva tarea!</p>
+        </div>
+        
+        <div class="task-list" *ngIf="tasks.length > 0">
+          <div 
+            *ngFor="let task of tasks; trackBy: task?.id" 
+            class="task-item"
+            [class.completed]="task.completed"
+          >
+            <div class="task-header">
+              <div class="task-status">
+                <input 
+                  type="checkbox" 
+                  [checked]="task.completed" 
+                  (change)="onTaskToggle(task)"
+                  [attr.aria-label]="'Marcar tarea ' + task.title + ' como ' + (task.completed ? 'pendiente' : 'completada')"
+                >
+                <h3>{{ task.title }}</h3>
+              </div>
+              
+              <div class="task-actions">
+                <button 
+                  class="icon-button edit" 
+                  (click)="onEditTask(task)" 
+                  aria-label="Editar tarea"
+                >
+                  Editar
+                </button>
+                <button 
+                  class="icon-button delete" 
+                  (click)="onTaskDeleted(task.id!)" 
+                  aria-label="Eliminar tarea"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+            
+            <div class="task-description">
+              {{ task.description }}
+            </div>
+            
+            <div class="task-meta">
+              <span class="creation-date">Creada: {{ task.createdAt | date:'medium' }}</span>
+              <span class="status-badge" [class.completed]="task.completed">
+                {{ task.completed ? 'Completada' : 'Pendiente' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
