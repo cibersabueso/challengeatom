@@ -90,4 +90,8 @@ export class TaskListComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  trackById(index: number, item: Task): string {
+    return item.id!;
+  }
 }

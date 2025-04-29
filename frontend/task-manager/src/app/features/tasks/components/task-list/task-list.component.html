@@ -28,7 +28,7 @@
         
         <div class="task-list" *ngIf="tasks.length > 0">
           <div 
-            *ngFor="let task of tasks; trackBy: task?.id" 
+          *ngFor="let task of tasks; trackBy: trackById"
             class="task-item"
             [class.completed]="task.completed"
           >
